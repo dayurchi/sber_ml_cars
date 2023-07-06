@@ -9,7 +9,8 @@ from ml_cars.constants import CAT_COLUMNS
 from ml_cars.make_features import get_features
 
 
-def train(sessions, hits, test_size=0.2, random_state=42, output_dir='models', model_name='last', **kwargs):
+def train(sessions: str, hits: str, test_size: float = 0.2, random_state: int = 42,
+          output_dir: str = 'models', model_name: str = 'last', **kwargs) -> CatBoostClassifier:
     X, y = get_features(sessions, hits, return_Xy=True)
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=test_size, random_state=random_state, stratify=y

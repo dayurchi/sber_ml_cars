@@ -3,7 +3,7 @@ import re
 import numpy as np
 import pandas as pd
 
-
+from typing import Tuple
 from ml_cars.constants import CAT_COLUMNS
 
 
@@ -22,7 +22,7 @@ ACTIONS = [
 COLUMNS_TO_DROP = ['client_id']
 
 
-def process_hits(hits: pd.DataFrame) -> pd.DataFrame:
+def process_hits(hits: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series]:
 
     def utm_list_create(x, list_to_comp):
         r = re.compile(x)
@@ -96,7 +96,7 @@ def process_hits(hits: pd.DataFrame) -> pd.DataFrame:
     return utm_source, cars, models, is_action
 
 
-def process_sessions(sessions, utm_source, cars, models):
+def process_sessions(sessions: pd.DataFrame, utm_source: pd.DataFrame, cars: pd.DataFrame, models: pd.DataFrame) -> pd.DataFrame:
 
     utm_source = utm_source.reindex(sessions['session_id']).fillna(0)
     cars = cars.reindex(sessions['session_id']).fillna(0)
@@ -111,7 +111,7 @@ def process_sessions(sessions, utm_source, cars, models):
     return sessions.set_index('session_id')
 
 
-def get_features(sessions, hits, return_Xy=False):
+def get_features(sessions: pd.DataFrame, hits: pd.DataFrame, return_Xy=False) -> Tuple[pd.DataFrame, pd.DataFrame]:
     utm_source, cars, models, is_action = process_hits(hits)
     sessions['is_action'] = sessions['session_id'].map(is_action)
     sessions_processed = process_sessions(sessions, utm_source, cars, models).drop(columns=COLUMNS_TO_DROP)

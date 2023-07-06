@@ -20,7 +20,7 @@ TMP_IS_ACTION = '/opt/airflow/dags/is_action_tmp.csv'
 OUTPUT_PREDICTION_PATH = '/opt/airflow/dags/prediction.csv'
 
 
-def save_prediction_to_db():
+def save_prediction_to_db() -> None:
     y_pred = pd.read_csv(OUTPUT_PREDICTION_PATH, index_col=0).squeeze()
     engine = create_engine('sqlite:////app/database.db')
     table = Table('predictions', MetaData(), autoload_with=engine)
@@ -36,7 +36,7 @@ def save_prediction_to_db():
             )
 
 
-def process_hits_wrapper():
+def process_hits_wrapper() -> None:
     hits = pd.read_csv(INPUT_HITS_PATH, index_col=0)
     utm_source, cars, models, is_action = process_hits(hits)
     utm_source.to_csv(TMP_UTM_SOURCE)
@@ -45,7 +45,7 @@ def process_hits_wrapper():
     is_action.to_csv(TMP_IS_ACTION)
 
 
-def process_sessions_wrapper():
+def process_sessions_wrapper() -> None:
     sessions = pd.read_csv(INPUT_SESSIONS_PATH, index_col=0)
     utm_source = pd.read_csv(TMP_UTM_SOURCE, index_col=0)
     cars = pd.read_csv(TMP_CARS, index_col=0)
@@ -57,7 +57,7 @@ def process_sessions_wrapper():
     sessions_processed.to_csv(TMP_SESSIONS_PATH)
 
 
-def make_prediction():
+def make_prediction() -> None:
     sessions_processed = pd.read_csv(TMP_SESSIONS_PATH, index_col=0)
     # sessions_processed = sessions_processed.drop(columns='is_action')
     model = load_model()

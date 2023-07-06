@@ -14,8 +14,9 @@ from ml_cars import predict
 INPUT_JSON_PATH = '/opt/airflow/dags/new_jsons'
 OUTPUT_PREDICTION_PATH = '/opt/airflow/dags/results_jsons'
 
-def make_prediction():
-    def record_json(name):
+
+def make_prediction() -> None:
+    def record_json(name: str) -> None:
         new_filename = "prediction_new_" + record_path
 
         # Обработка разделителей пути с использованием os.path.join()

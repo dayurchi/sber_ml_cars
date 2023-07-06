@@ -16,12 +16,12 @@ INPUT_JSON_PATH = '/opt/airflow/dags/new_jsons'
 OUTPUT_PREDICTION_PATH = '/opt/airflow/dags/prediction_new.json'
 
 def save_prediction_to_db(
-    session_id,
-    prediction,
-    date_time,
-    engine,
-    table_name='predictions'
-):
+        session_id: int,
+        prediction: int,
+        date_time: datetime,
+        engine: create_engine,
+        table_name: str = 'predictions'
+) -> None:
     table = Table(table_name, MetaData(), autoload_with=engine)
     with engine.connect() as connection:
         connection.execute(
@@ -33,7 +33,7 @@ def save_prediction_to_db(
         )
 
 
-def make_prediction():
+def make_prediction() -> None:
 
     file_list = os.listdir(INPUT_JSON_PATH)
 
